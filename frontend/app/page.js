@@ -26,7 +26,7 @@ export default function Home() {
   };
 
   const addDoctor = async () => {
-    const res = await fetch(`hhttps://doctor-app-cyan.vercel.app/api/add-doctor`, {
+    const res = await fetch(`https://doctor-app-cyan.vercel.app/api/add-doctor`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(adds),
