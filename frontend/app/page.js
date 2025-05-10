@@ -20,13 +20,13 @@ export default function Home() {
 
   const fetchDoctors = async () => {
     const params = new URLSearchParams(filters);
-    const res = await fetch(`http://localhost:41033/api/list-doctor-with-filter?${params}`);
+    const res = await fetch(`https://doctor-app-cyan.vercel.app/api/list-doctor-with-filter?${params}`);
     const data = await res.json();
     setDoctors(data.doctors);
   };
 
   const addDoctor = async () => {
-    const res = await fetch(`http://localhost:41033/api/add-doctor`, {
+    const res = await fetch(`hhttps://doctor-app-cyan.vercel.app/api/add-doctor`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(adds),
