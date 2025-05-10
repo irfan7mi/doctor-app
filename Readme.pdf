@@ -1,0 +1,29 @@
+🏥 Apollo247 Clone – General Physician Listing Page
+📌 Project Description
+This project is a clone of Apollo247’s General Physician page. It showcases a doctor listing interface built with modern technologies. The aim is to demonstrate server-side filtering, REST API integration, and Off-page SEO capabilities using Next.js.
+
+Users can view doctors based on filters like Specialty and City. Data is fetched from a backend API connected to a SQL database. This assignment demonstrates building a single destination page with server-rendered metadata and functional filtering.
+
+🛠️ Technologies Used
+Frontend
+Next.js 14 (App Router + Off-page SEO using <Head>)
+
+React Hooks
+
+CSS Modules / Global CSS
+
+Backend
+Node.js + Express.js
+
+REST API
+
+MySQL or PostgreSQL (via SQL queries)
+
+
+
+Note:
+node_modules folder is excluded to reduce ZIP size (frontend).
+
+Max ZIP upload size: 50MB
+
+Included formats: .zip, .pdf
