@@ -5,13 +5,17 @@ require('dotenv').config();
 
 const app = express();
 app.use(express.json());
-const corsOptions = {
-  origin: 'https://doctor-app-client-hazel.vercel.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-};
 
-app.use(cors(corsOptions));
+app.get('/', (req, res) => {
+  res.json({ success: true, message: 'Welcome to DooRFooD API!' });
+});
+
+app.use(cors({ origin: 'https://doctor-app-client-hazel.vercel.app' }));
+
+app.use(cors({
+  origin: "*", // Allow all origins (for development)
+  methods: ["GET", "POST", "PUT", "DELETE"],
+}));
 
 
 const db = mysql.createConnection({
