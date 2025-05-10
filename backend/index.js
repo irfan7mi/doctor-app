@@ -3,20 +3,19 @@ const mysql = require('mysql2');
 const cors = require('cors');
 require('dotenv').config();
 
+const addDoctor = require('./api/add-doctor');
+const listDoctorWithFilter = require('./api/list-doctor-with-filter');
+
 const app = express();
+
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.json({ success: true, message: 'Welcome to DooRFooD API!' });
-});
-
-app.use(cors({ origin: 'https://doctor-app-client-hazel.vercel.app' }));
-
 app.use(cors({
-  origin: "*", // Allow all origins (for development)
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: 'https://doctor-app-client-hazel.vercel.app', // Your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type'],
+  credentials: true,
 }));
-
 
 const db = mysql.createConnection({
   host: 'yamanote.proxy.rlwy.net',
@@ -27,53 +26,16 @@ const db = mysql.createConnection({
 });
 
 db.connect(err => {
-  if (err) console.error('Connection error:', err);
+  if (err) console.error('DB Connection Error:', err);
   else console.log('MySQL connected');
 });
 
-app.post('/api/add-doctor', (req, res) => {
-  const { id, name, specialty, experience, rating, city } = req.body;
-
-  const checkSql = "SELECT * FROM doctors WHERE id = ?";
-  db.query(checkSql, [id], (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-
-    if (results.length > 0) {
-      return res.status(409).json({ message: 'Doctor details already exist', success: false });
-    }
-
-    const insertSql = 'INSERT INTO doctors (id, name, specialty, experience, rating, city) VALUES (?, ?, ?, ?, ?, ?)';
-    db.query(insertSql, [id, name, specialty, experience, rating, city], (err) => {
-      if (err) return res.status(500).json({ error: err.message, success: false });
-      res.status(201).json({ message: 'Doctor added successfully', success: true });
-    });
-  });
+app.get('/', (req, res) => {
+  res.json({ success: true, message: 'Welcome to Doctor Web API!' });
 });
 
-app.get('/api/list-doctor-with-filter', (req, res) => {
-  const { specialty, city, page = 1, limit = 10 } = req.query;
-  const offset = (page - 1) * limit;
+app.post('/api/add-doctor', addDoctor);
+app.get('/api/list-doctor-with-filter', listDoctorWithFilter);
 
-  let sql = 'SELECT * FROM doctors WHERE 1=1';
-  const params = [];
-
-  if (specialty) {
-    sql += ' AND specialty = ?';
-    params.push(specialty);
-  }
-  if (city) {
-    sql += ' AND city = ?';
-    params.push(city);
-  }
-
-  sql += ' LIMIT ? OFFSET ?';
-  params.push(Number(limit), Number(offset));
-
-  db.query(sql, params, (err, results) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ page: Number(page), doctors: results });
-  });
-});
-
-const PORT = 41033;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
