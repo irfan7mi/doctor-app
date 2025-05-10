@@ -5,7 +5,14 @@ require('dotenv').config();
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+const corsOptions = {
+  origin: 'https://doctor-app-client-hazel.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+
 
 const db = mysql.createConnection({
   host: 'yamanote.proxy.rlwy.net',
@@ -20,7 +27,6 @@ db.connect(err => {
   else console.log('MySQL connected');
 });
 
-// API: Add doctor
 app.post('/api/add-doctor', (req, res) => {
   const { id, name, specialty, experience, rating, city } = req.body;
 
@@ -40,7 +46,6 @@ app.post('/api/add-doctor', (req, res) => {
   });
 });
 
-// API: List doctors with filters
 app.get('/api/list-doctor-with-filter', (req, res) => {
   const { specialty, city, page = 1, limit = 10 } = req.query;
   const offset = (page - 1) * limit;
